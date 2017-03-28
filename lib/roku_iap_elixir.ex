@@ -9,9 +9,13 @@ defmodule RokuIapElixir do
     "https://apipub.roku.com/listen/transaction-service.svc" <> url
   end
 
-  def process_response_body(body) do
+  defp process_response_body(body) do
     body
     |> Poison.decode!
+  end
+
+  defp process_request_options(options) do
+    [[ ssl: [{:versions, [:'tlsv1.2']}] ] | options]
   end
 
   def validate_transaction(web_api_key, transaction_id) do
