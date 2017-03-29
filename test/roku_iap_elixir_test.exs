@@ -38,7 +38,7 @@ defmodule RokuIapElixirTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.validate_transaction("k_1", "t_1") ==
+    assert RokuIapElixir.with_api_key("k_1").validate_transaction("t_1") ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
