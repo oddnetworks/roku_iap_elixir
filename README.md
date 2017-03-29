@@ -1,19 +1,5 @@
-# RokuIapElixir
+# Roku IAP
 
-**TODO: Add description**
+[![Build Status](https://travis-ci.org/oddnetworks/roku_iap_elixir.svg?branch=master)](https://travis-ci.org/oddnetworks/roku_iap_elixir)
 
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `roku_iap_elixir` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [{:roku_iap_elixir, "~> 0.1.0"}]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/roku_iap_elixir](https://hexdocs.pm/roku_iap_elixir).
-
+An Elixir HTTP client for interacting with the [Roku IAP REST API](https://sdkdocs.roku.com/display/sdkdoc/Web+Service+API).
