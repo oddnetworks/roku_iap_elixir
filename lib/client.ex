@@ -18,7 +18,7 @@ defmodule RokuIAP.Client do
   end
 
   defp process_request_headers(headers) do
-    [{"Accept", "application/json"} | headers]
+    [{"accept", "application/json"} | headers]
   end
 
   defp process_request_options(options) do

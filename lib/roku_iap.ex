@@ -45,7 +45,7 @@ defmodule RokuIAP do
         partnerReferenceId: partner_reference_id
       }
 
-    Client.post("/cancel-subscription", body, [{"Content-Type", "application/json"}])
+    Client.post("/cancel-subscription", body, [{"content-type", "application/json"}])
   end
 
   @doc """
@@ -68,7 +68,7 @@ defmodule RokuIAP do
         comments: comment
       }
 
-    Client.post("/refund-subscription", body, [{"Content-Type", "application/json"}])
+    Client.post("/refund-subscription", body, [{"content-type", "application/json"}])
   end
 
   @doc """
@@ -87,7 +87,7 @@ defmodule RokuIAP do
         newBillCycleDate: DateTime.to_iso8601(new_bill_cycle_date)
       }
 
-    Client.post("/update-bill-cycle", body, [{"Content-Type", "application/json"}])
+    Client.post("/update-bill-cycle", body, [{"content-type", "application/json"}])
   end
 
   @doc """
@@ -114,6 +114,6 @@ defmodule RokuIAP do
         comments: comment
       }
 
-    Client.post("/issue-service-credit", body, [{"Content-Type", "application/json"}])
+    Client.post("/issue-service-credit", body, [{"content-type", "application/json"}])
   end
 end

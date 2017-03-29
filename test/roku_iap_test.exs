@@ -32,7 +32,7 @@ defmodule RokuIAPTest do
       :request, 
       [
         {
-          [:get, "https://apipub.roku.com/listen/transaction-service.svc/validate-transaction/k_1/t_1", [{"Accept", "application/json"}], "", []],
+          [:get, "https://apipub.roku.com/listen/transaction-service.svc/validate-transaction/k_1/t_1", [{"accept", "application/json"}], "", []],
           {:ok, 200, [], :client}
         }
       ])
@@ -70,7 +70,7 @@ defmodule RokuIAPTest do
       :request, 
       [
         {
-          [:get, "https://apipub.roku.com/listen/transaction-service.svc/validate-refund/k_1/t_2", [{"Accept", "application/json"}], "", []],
+          [:get, "https://apipub.roku.com/listen/transaction-service.svc/validate-refund/k_1/t_2", [{"accept", "application/json"}], "", []],
           {:ok, 200, [], :client}
         }
       ])
@@ -118,7 +118,7 @@ defmodule RokuIAPTest do
       :request, 
       [
         {
-          [:post, "https://apipub.roku.com/listen/transaction-service.svc/cancel-subscription", [{"Accept", "application/json"}, {"Content-Type", "application/json"}], Poison.encode!(request), []],
+          [:post, "https://apipub.roku.com/listen/transaction-service.svc/cancel-subscription", [{"accept", "application/json"}, {"content-type", "application/json"}], Poison.encode!(request), []],
           {:ok, 200, [], :client}
         }
       ])
@@ -164,7 +164,7 @@ defmodule RokuIAPTest do
       :request, 
       [
         {
-          [:post, "https://apipub.roku.com/listen/transaction-service.svc/refund-subscription", [{"Accept", "application/json"}, {"Content-Type", "application/json"}], Poison.encode!(request), []],
+          [:post, "https://apipub.roku.com/listen/transaction-service.svc/refund-subscription", [{"accept", "application/json"}, {"content-type", "application/json"}], Poison.encode!(request), []],
           {:ok, 200, [], :client}
         }
       ])
@@ -202,7 +202,7 @@ defmodule RokuIAPTest do
       :request, 
       [
         {
-          [:post, "https://apipub.roku.com/listen/transaction-service.svc/update-bill-cycle", [{"Accept", "application/json"}, {"Content-Type", "application/json"}], Poison.encode!(request), []],
+          [:post, "https://apipub.roku.com/listen/transaction-service.svc/update-bill-cycle", [{"accept", "application/json"}, {"content-type", "application/json"}], Poison.encode!(request), []],
           {:ok, 200, [], :client}
         }
       ])
@@ -242,7 +242,7 @@ defmodule RokuIAPTest do
       :request, 
       [
         {
-          [:post, "https://apipub.roku.com/listen/transaction-service.svc/issue-service-credit", [{"Accept", "application/json"}, {"Content-Type", "application/json"}], Poison.encode!(request), []],
+          [:post, "https://apipub.roku.com/listen/transaction-service.svc/issue-service-credit", [{"accept", "application/json"}, {"content-type", "application/json"}], Poison.encode!(request), []],
           {:ok, 200, [], :client}
         }
       ])
