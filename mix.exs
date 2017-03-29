@@ -29,8 +29,10 @@ defmodule RokuIapElixir.Mixfile do
   # Type "mix help deps" for more examples and options
   defp deps do
     [
-      {:httpoison, "~> 0.10.0"},
-      {:poison, "~> 3.1.0"}
+      {:httpoison, "~> 0.11.1"},
+      {:poison, "~> 3.1.0"},
+      {:hackney, "~> 1.7.1"},
+      {:meck, "~> 0.8.2", only: :test}
     ]
   end
 end
