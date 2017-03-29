@@ -15,8 +15,10 @@ defmodule RokuIapElixir do
   end
 
   defp process_request_body(body) do
-    IO.inspect body
-    body
+    case body do
+      "" -> body
+      _ -> body |> Poison.encode!
+    end
   end
 
   defp process_request_headers(headers) do
@@ -36,27 +38,28 @@ defmodule RokuIapElixir do
   end
 
   def cancel_subscription(web_api_key, transaction_id, partner_reference_id, cancellation_date) do
-    body = Poison.encode!(%{
+    body = %{
         partnerAPIKey: web_api_key,
         transactionId: transaction_id,
         cancellationDate: cancellation_date,
         partnerReferenceId: partner_reference_id
-      })
+      }
 
     post("/cancel-subscription", body, [{"Content-Type", "application/json"}])
   end
 
-  def refund_subscription(web_api_key, transaction_id, partner_reference_id, amount, refund_comment) do
-    body = Poison.encode!(%{
+  def refund_subscription(web_api_key, transaction_id, partner_reference_id, amount, comment) do
+    body = %{
         partnerAPIKey: web_api_key,
         transactionId: transaction_id,
         amount: amount,
         partnerReferenceId: partner_reference_id,
-        comments: refund_comment
-      })
+        comments: comment
+      }
 
     post("/refund-subscription", body, [{"Content-Type", "application/json"}])
   end
+
   def update_bill_cycle(web_api_key, transaction_id, new_bill_cycle_date) do
     body = %{
         partnerAPIKey: web_api_key,
