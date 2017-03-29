@@ -38,7 +38,7 @@ defmodule RokuIapElixirTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.with_api_key("k_1").validate_transaction("t_1") ==
+    assert RokuIapElixir.validate_transaction("k_1", "t_1") ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -87,11 +87,14 @@ defmodule RokuIapElixirTest do
   end
 
   test "cancel_subscription/4" do
+    cancellation_date = %DateTime{year: 2000, month: 2, day: 29, zone_abbr: "UTC",
+                                  hour: 23, minute: 0, second: 7, microsecond: {0, 0},
+                                  utc_offset: 0, std_offset: 0, time_zone: "Etc/UTC"}
     request = %{
       "transactionId" => "t_3",
       "partnerReferenceId" => "p_1",
       "partnerAPIKey" => "k_1",
-      "cancellationDate" => "d_1"
+      "cancellationDate" => cancellation_date
     }
 
     response = %{
@@ -121,7 +124,7 @@ defmodule RokuIapElixirTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.cancel_subscription("k_1", "t_3", "p_1", "d_1") ==
+    assert RokuIapElixir.cancel_subscription("k_1", "t_3", "p_1", cancellation_date) ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -178,10 +181,13 @@ defmodule RokuIapElixirTest do
   end
 
   test "update_billing_cycle/4" do
+    billing_cycle_date = %DateTime{year: 2000, month: 2, day: 29, zone_abbr: "UTC",
+                                   hour: 23, minute: 0, second: 7, microsecond: {0, 0},
+                                   utc_offset: 0, std_offset: 0, time_zone: "Etc/UTC"}
     request = %{
       "transactionId" => "t_3",
       "partnerAPIKey" => "k_1",
-      "newBillCycleDate" => "d_1"
+      "newBillCycleDate" => billing_cycle_date
     }
 
     response = %{
@@ -202,7 +208,7 @@ defmodule RokuIapElixirTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.update_bill_cycle("k_1", "t_3", "d_1") ==
+    assert RokuIapElixir.update_bill_cycle("k_1", "t_3", billing_cycle_date) ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
