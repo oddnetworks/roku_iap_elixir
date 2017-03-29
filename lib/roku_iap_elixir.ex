@@ -14,20 +14,25 @@ defmodule RokuIapElixir do
     |> Poison.decode!
   end
 
+  defp process_request_body(body) do
+    IO.inspect body
+    body
+  end
+
+  defp process_request_headers(headers) do
+    [{"Accept", "application/json"} | headers]
+  end
+
   defp process_request_options(options) do
     [[ ssl: [{:versions, [:'tlsv1.2']}] ] | options]
   end
 
   def validate_transaction(web_api_key, transaction_id) do
-    process_url("/validate-transaction/#{web_api_key}/#{transaction_id}")
-    |> get
-    |> process_response_body
+    get("/validate-transaction/#{web_api_key}/#{transaction_id}")
   end
 
   def validate_refund(web_api_key, refund_id) do
-    process_url("/validate-refund/#{web_api_key}/#{refund_id}")
-    |> get
-    |> process_response_body
+    get("/validate-refund/#{web_api_key}/#{refund_id}")
   end
 
   def cancel_subscription(web_api_key, transaction_id, partner_reference_id, cancellation_date) do
@@ -38,9 +43,7 @@ defmodule RokuIapElixir do
         partnerReferenceId: partner_reference_id
       })
 
-    process_url("/cancel-subscription")
-    |> post(body, [{"Content-Type", "application/json"}])
-    |> process_response_body
+    post("/cancel-subscription", body, [{"Content-Type", "application/json"}])
   end
 
   def refund_subscription(web_api_key, transaction_id, partner_reference_id, amount, refund_comment) do
@@ -52,8 +55,6 @@ defmodule RokuIapElixir do
         comments: refund_comment
       })
 
-    process_url("/refund-subscription")
-    |> post(body, [{"Content-Type", "application/json"}])
-    |> process_response_body
+    post("/refund-subscription", body, [{"Content-Type", "application/json"}])
   end
 end
