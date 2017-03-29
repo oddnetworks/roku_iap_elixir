@@ -176,4 +176,79 @@ defmodule RokuIapElixirTest do
 
     assert validate :hackney
   end
+
+  test "update_billing_cycle/4" do
+    request = %{
+      "transactionId" => "t_3",
+      "partnerAPIKey" => "k_1",
+      "newBillCycleDate" => "d_1"
+    }
+
+    response = %{
+      "errorCode" => "",
+      "errorDetails" => "",
+      "errorMessage" => "",
+      "status" => 0
+    }
+
+    expect(
+      :hackney, 
+      :request, 
+      [
+        {
+          [:post, "https://apipub.roku.com/listen/transaction-service.svc/update-bill-cycle", [{"Accept", "application/json"}, {"Content-Type", "application/json"}], Poison.encode!(request), []],
+          {:ok, 200, [], :client}
+        }
+      ])
+    expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
+
+    assert RokuIapElixir.update_bill_cycle("k_1", "t_3", "d_1") ==
+      {:ok, %HTTPoison.Response{
+          status_code: 200,
+          body: response
+        }
+      }
+
+    assert validate :hackney
+  end
+
+  test "issue_service_credit/4" do
+    request = %{
+      "partnerAPIKey": "k_1",
+      "channelId": "c_1",
+      "amount": 6.66,
+      "partnerReferenceId": "p_r_1",
+      "productId": "p_1",
+      "rokuCustomerId": "r_c_1",
+      "comments": "cuz roku"
+    }
+
+    response = %{
+      "errorCode" => "",
+      "errorDetails" => "",
+      "errorMessage" => "",
+      "status" => 0,
+      "ReferenceId" => "Ref1"
+    }
+
+    expect(
+      :hackney, 
+      :request, 
+      [
+        {
+          [:post, "https://apipub.roku.com/listen/transaction-service.svc/issue-service-credit", [{"Accept", "application/json"}, {"Content-Type", "application/json"}], Poison.encode!(request), []],
+          {:ok, 200, [], :client}
+        }
+      ])
+    expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
+
+    assert RokuIapElixir.issue_service_credit("k_1", "c_1", "p_r_1", "p_1", "r_c_1", 6.66, "cuz roku") ==
+      {:ok, %HTTPoison.Response{
+          status_code: 200,
+          body: response
+        }
+      }
+
+    assert validate :hackney
+  end
 end

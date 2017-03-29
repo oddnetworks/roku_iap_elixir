@@ -57,4 +57,27 @@ defmodule RokuIapElixir do
 
     post("/refund-subscription", body, [{"Content-Type", "application/json"}])
   end
+  def update_bill_cycle(web_api_key, transaction_id, new_bill_cycle_date) do
+    body = %{
+        partnerAPIKey: web_api_key,
+        transactionId: transaction_id,
+        newBillCycleDate: new_bill_cycle_date
+      }
+
+    post("/update-bill-cycle", body, [{"Content-Type", "application/json"}])
+  end
+
+  def issue_service_credit(web_api_key, channel_id, partner_reference_id, product_id, roku_customer_id, amount, comment) do
+    body = %{
+        partnerAPIKey: web_api_key,
+        channelId: channel_id,
+        amount: amount,
+        partnerReferenceId: partner_reference_id,
+        productId: product_id,
+        rokuCustomerId: roku_customer_id,
+        comments: comment
+      }
+
+    post("/issue-service-credit", body, [{"Content-Type", "application/json"}])
+  end
 end
