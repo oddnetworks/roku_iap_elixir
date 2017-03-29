@@ -17,7 +17,7 @@ defmodule RokuIapElixir do
     body = %{
         partnerAPIKey: web_api_key,
         transactionId: transaction_id,
-        cancellationDate: cancellation_date,
+        cancellationDate: DateTime.to_iso8601(cancellation_date),
         partnerReferenceId: partner_reference_id
       }
 
@@ -40,7 +40,7 @@ defmodule RokuIapElixir do
     body = %{
         partnerAPIKey: web_api_key,
         transactionId: transaction_id,
-        newBillCycleDate: new_bill_cycle_date
+        newBillCycleDate: DateTime.to_iso8601(new_bill_cycle_date)
       }
 
     Client.post("/update-bill-cycle", body, [{"Content-Type", "application/json"}])
