@@ -1,4 +1,4 @@
-defmodule RokuIapElixir.Mixfile do
+defmodule RokuIAP.Mixfile do
   use Mix.Project
 
   def project do

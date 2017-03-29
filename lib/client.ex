@@ -1,4 +1,4 @@
-defmodule RokuIapElixir.Client do
+defmodule RokuIAP.Client do
   use HTTPoison.Base
 
   def process_url(url) do

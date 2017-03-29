@@ -1,9 +1,9 @@
-defmodule RokuIapElixir do
+defmodule RokuIAP do
   @moduledoc """
-  Documentation for RokuIapElixir.
+  Documentation for RokuIAP.
   """
 
-  alias RokuIapElixir.Client
+  alias RokuIAP.Client
 
   @doc """
   Validates a subscription

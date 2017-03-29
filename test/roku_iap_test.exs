@@ -1,8 +1,8 @@
-defmodule RokuIapElixirTest do
+defmodule RokuIAPTest do
   use ExUnit.Case, async: true
   
   import :meck
-  alias RokuIapElixir
+  alias RokuIAP
 
   setup do
     new :hackney
@@ -38,7 +38,7 @@ defmodule RokuIapElixirTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.validate_transaction("k_1", "t_1") ==
+    assert RokuIAP.validate_transaction("k_1", "t_1") ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -76,7 +76,7 @@ defmodule RokuIapElixirTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.validate_refund("k_1", "t_2") ==
+    assert RokuIAP.validate_refund("k_1", "t_2") ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -124,7 +124,7 @@ defmodule RokuIapElixirTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.cancel_subscription("k_1", "t_3", "p_1", cancellation_date) ==
+    assert RokuIAP.cancel_subscription("k_1", "t_3", "p_1", cancellation_date) ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -170,7 +170,7 @@ defmodule RokuIapElixirTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.refund_subscription("k_1", "t_3", "p_1", 6.66, "cuz roku") ==
+    assert RokuIAP.refund_subscription("k_1", "t_3", "p_1", 6.66, "cuz roku") ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -208,7 +208,7 @@ defmodule RokuIapElixirTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.update_bill_cycle("k_1", "t_3", billing_cycle_date) ==
+    assert RokuIAP.update_bill_cycle("k_1", "t_3", billing_cycle_date) ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -248,7 +248,7 @@ defmodule RokuIapElixirTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.issue_service_credit("k_1", "c_1", "p_r_1", "p_1", "r_c_1", 6.66, "cuz roku") ==
+    assert RokuIAP.issue_service_credit("k_1", "c_1", "p_r_1", "p_1", "r_c_1", 6.66, "cuz roku") ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
