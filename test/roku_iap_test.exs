@@ -1,8 +1,8 @@
-defmodule RokuIapElixirTest do
+defmodule RokuIAPTest do
   use ExUnit.Case, async: true
   
   import :meck
-  alias RokuIapElixir
+  alias RokuIAP
 
   setup do
     new :hackney
@@ -32,13 +32,13 @@ defmodule RokuIapElixirTest do
       :request, 
       [
         {
-          [:get, "https://apipub.roku.com/listen/transaction-service.svc/validate-transaction/k_1/t_1", [{"Accept", "application/json"}], "", []],
+          [:get, "https://apipub.roku.com/listen/transaction-service.svc/validate-transaction/k_1/t_1", [{"accept", "application/json"}], "", []],
           {:ok, 200, [], :client}
         }
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.validate_transaction("k_1", "t_1") ==
+    assert RokuIAP.validate_transaction("k_1", "t_1") ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -70,13 +70,13 @@ defmodule RokuIapElixirTest do
       :request, 
       [
         {
-          [:get, "https://apipub.roku.com/listen/transaction-service.svc/validate-refund/k_1/t_2", [{"Accept", "application/json"}], "", []],
+          [:get, "https://apipub.roku.com/listen/transaction-service.svc/validate-refund/k_1/t_2", [{"accept", "application/json"}], "", []],
           {:ok, 200, [], :client}
         }
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.validate_refund("k_1", "t_2") ==
+    assert RokuIAP.validate_refund("k_1", "t_2") ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -87,11 +87,14 @@ defmodule RokuIapElixirTest do
   end
 
   test "cancel_subscription/4" do
+    cancellation_date = %DateTime{year: 2000, month: 2, day: 29, zone_abbr: "UTC",
+                                  hour: 23, minute: 0, second: 7, microsecond: {0, 0},
+                                  utc_offset: 0, std_offset: 0, time_zone: "Etc/UTC"}
     request = %{
       "transactionId" => "t_3",
       "partnerReferenceId" => "p_1",
       "partnerAPIKey" => "k_1",
-      "cancellationDate" => "d_1"
+      "cancellationDate" => cancellation_date
     }
 
     response = %{
@@ -115,13 +118,13 @@ defmodule RokuIapElixirTest do
       :request, 
       [
         {
-          [:post, "https://apipub.roku.com/listen/transaction-service.svc/cancel-subscription", [{"Accept", "application/json"}, {"Content-Type", "application/json"}], Poison.encode!(request), []],
+          [:post, "https://apipub.roku.com/listen/transaction-service.svc/cancel-subscription", [{"accept", "application/json"}, {"content-type", "application/json"}], Poison.encode!(request), []],
           {:ok, 200, [], :client}
         }
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.cancel_subscription("k_1", "t_3", "p_1", "d_1") ==
+    assert RokuIAP.cancel_subscription("k_1", "t_3", "p_1", cancellation_date) ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -161,13 +164,13 @@ defmodule RokuIapElixirTest do
       :request, 
       [
         {
-          [:post, "https://apipub.roku.com/listen/transaction-service.svc/refund-subscription", [{"Accept", "application/json"}, {"Content-Type", "application/json"}], Poison.encode!(request), []],
+          [:post, "https://apipub.roku.com/listen/transaction-service.svc/refund-subscription", [{"accept", "application/json"}, {"content-type", "application/json"}], Poison.encode!(request), []],
           {:ok, 200, [], :client}
         }
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.refund_subscription("k_1", "t_3", "p_1", 6.66, "cuz roku") ==
+    assert RokuIAP.refund_subscription("k_1", "t_3", "p_1", 6.66, "cuz roku") ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -178,10 +181,13 @@ defmodule RokuIapElixirTest do
   end
 
   test "update_billing_cycle/4" do
+    billing_cycle_date = %DateTime{year: 2000, month: 2, day: 29, zone_abbr: "UTC",
+                                   hour: 23, minute: 0, second: 7, microsecond: {0, 0},
+                                   utc_offset: 0, std_offset: 0, time_zone: "Etc/UTC"}
     request = %{
       "transactionId" => "t_3",
       "partnerAPIKey" => "k_1",
-      "newBillCycleDate" => "d_1"
+      "newBillCycleDate" => billing_cycle_date
     }
 
     response = %{
@@ -196,13 +202,13 @@ defmodule RokuIapElixirTest do
       :request, 
       [
         {
-          [:post, "https://apipub.roku.com/listen/transaction-service.svc/update-bill-cycle", [{"Accept", "application/json"}, {"Content-Type", "application/json"}], Poison.encode!(request), []],
+          [:post, "https://apipub.roku.com/listen/transaction-service.svc/update-bill-cycle", [{"accept", "application/json"}, {"content-type", "application/json"}], Poison.encode!(request), []],
           {:ok, 200, [], :client}
         }
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.update_bill_cycle("k_1", "t_3", "d_1") ==
+    assert RokuIAP.update_bill_cycle("k_1", "t_3", billing_cycle_date) ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
@@ -236,13 +242,13 @@ defmodule RokuIapElixirTest do
       :request, 
       [
         {
-          [:post, "https://apipub.roku.com/listen/transaction-service.svc/issue-service-credit", [{"Accept", "application/json"}, {"Content-Type", "application/json"}], Poison.encode!(request), []],
+          [:post, "https://apipub.roku.com/listen/transaction-service.svc/issue-service-credit", [{"accept", "application/json"}, {"content-type", "application/json"}], Poison.encode!(request), []],
           {:ok, 200, [], :client}
         }
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIapElixir.issue_service_credit("k_1", "c_1", "p_r_1", "p_1", "r_c_1", 6.66, "cuz roku") ==
+    assert RokuIAP.issue_service_credit("k_1", "c_1", "p_r_1", "p_1", "r_c_1", 6.66, "cuz roku") ==
       {:ok, %HTTPoison.Response{
           status_code: 200,
           body: response
