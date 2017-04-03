@@ -11,9 +11,25 @@ defmodule RokuIAPTest do
   end
 
   test "validate_transaction/2" do
+    {:ok, date, _} = DateTime.from_iso8601("2012-07-22T14:59:50Z")
+
+    transaction = %RokuIAP.Transaction{
+      transaction_id: "t_1",
+      purchase_date: date,
+      channel_name: "123Video",
+      product_name: "123Video Monthly Subscription",
+      product_id: "NETMONTH",
+      amount: 9.99,
+      currency: :USD,
+      quantity: 1,
+      roku_customer_id: "abcdefghijklmnop",
+      expiration_date: date,
+      original_purchase_date: date
+    }
+
     response = %{
       "transactionId" => "t_1",
-      "purchaseDate" => "2012-07-22T14:59:50",
+      "purchaseDate" => "2012-07-22T14:59:50Z",
       "channelName" => "123Video",
       "productName" => "123Video Monthly Subscription",
       "productId" => "NETMONTH",
@@ -21,8 +37,8 @@ defmodule RokuIAPTest do
       "currency" => "USD",
       "quantity" => 1,
       "rokuCustomerId" => "abcdefghijklmnop",
-      "expirationDate" => "2012-08-22T14:59:50",
-      "originalPurchaseDate" => "2010-08-22T14:59:50",
+      "expirationDate" => "2012-07-22T14:59:50Z",
+      "originalPurchaseDate" => "2012-07-22T14:59:50Z",
       "status" => "Success",
       "errorMessage" => "error_message"
     }
@@ -38,20 +54,31 @@ defmodule RokuIAPTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIAP.validate_transaction("k_1", "t_1") ==
-      {:ok, %HTTPoison.Response{
-          status_code: 200,
-          body: response
-        }
-      }
+    assert {:ok, transaction} == RokuIAP.validate_transaction("k_1", "t_1")
 
     assert validate :hackney
   end
 
   test "validate_refund/2" do
+    {:ok, date, _} = DateTime.from_iso8601("2012-07-22T14:59:50Z")
+
+    transaction = %RokuIAP.Transaction{
+      transaction_id: "t_1",
+      purchase_date: date,
+      channel_name: "123Video",
+      product_name: "123Video Monthly Subscription",
+      product_id: "NETMONTH",
+      amount: 9.99,
+      currency: :USD,
+      quantity: 1,
+      roku_customer_id: "abcdefghijklmnop",
+      expiration_date: date,
+      original_purchase_date: date
+    }
+
     response = %{
-      "transactionId" => "t_2",
-      "purchaseDate" => "2012-07-22T14:59:50",
+      "transactionId" => "t_1",
+      "purchaseDate" => "2012-07-22T14:59:50Z",
       "channelName" => "123Video",
       "productName" => "123Video Monthly Subscription",
       "productId" => "NETMONTH",
@@ -59,8 +86,8 @@ defmodule RokuIAPTest do
       "currency" => "USD",
       "quantity" => 1,
       "rokuCustomerId" => "abcdefghijklmnop",
-      "expirationDate" => "2012-08-22T14:59:50",
-      "originalPurchaseDate" => "2010-08-22T14:59:50",
+      "expirationDate" => "2012-07-22T14:59:50Z",
+      "originalPurchaseDate" => "2012-07-22T14:59:50Z",
       "status" => "Success",
       "errorMessage" => "error_message"
     }
@@ -70,18 +97,13 @@ defmodule RokuIAPTest do
       :request, 
       [
         {
-          [:get, "https://apipub.roku.com/listen/transaction-service.svc/validate-refund/k_1/t_2", [{"accept", "application/json"}], "", []],
+          [:get, "https://apipub.roku.com/listen/transaction-service.svc/validate-refund/k_1/t_1", [{"accept", "application/json"}], "", []],
           {:ok, 200, [], :client}
         }
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIAP.validate_refund("k_1", "t_2") ==
-      {:ok, %HTTPoison.Response{
-          status_code: 200,
-          body: response
-        }
-      }
+    assert {:ok, transaction} == RokuIAP.validate_refund("k_1", "t_1")
 
     assert validate :hackney
   end
@@ -98,19 +120,7 @@ defmodule RokuIAPTest do
     }
 
     response = %{
-      "transactionId" => "t_2",
-      "purchaseDate" => "2012-07-22T14:59:50",
-      "channelName" => "123Video",
-      "productName" => "123Video Monthly Subscription",
-      "productId" => "NETMONTH",
-      "amount" => 9.99,
-      "currency" => "USD",
-      "quantity" => 1,
-      "rokuCustomerId" => "abcdefghijklmnop",
-      "expirationDate" => "2012-08-22T14:59:50",
-      "originalPurchaseDate" => "2010-08-22T14:59:50",
-      "status" => "Success",
-      "errorMessage" => "error_message"
+      "status" => "Success"
     }
 
     expect(
@@ -124,12 +134,7 @@ defmodule RokuIAPTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIAP.cancel_subscription("k_1", "t_3", "p_1", cancellation_date) ==
-      {:ok, %HTTPoison.Response{
-          status_code: 200,
-          body: response
-        }
-      }
+    assert :ok == RokuIAP.cancel_subscription("k_1", "t_3", "p_1", cancellation_date)
 
     assert validate :hackney
   end
@@ -144,19 +149,8 @@ defmodule RokuIAPTest do
     }
 
     response = %{
-      "transactionId" => "t_2",
-      "purchaseDate" => "2012-07-22T14:59:50",
-      "channelName" => "123Video",
-      "productName" => "123Video Monthly Subscription",
-      "productId" => "NETMONTH",
-      "amount" => 9.99,
-      "currency" => "USD",
-      "quantity" => 1,
-      "rokuCustomerId" => "abcdefghijklmnop",
-      "expirationDate" => "2012-08-22T14:59:50",
-      "originalPurchaseDate" => "2010-08-22T14:59:50",
       "status" => "Success",
-      "errorMessage" => "error_message"
+      "refundId" => "r_3"
     }
 
     expect(
@@ -170,12 +164,7 @@ defmodule RokuIAPTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIAP.refund_subscription("k_1", "t_3", "p_1", 6.66, "cuz roku") ==
-      {:ok, %HTTPoison.Response{
-          status_code: 200,
-          body: response
-        }
-      }
+    assert {:ok, "r_3"} == RokuIAP.refund_subscription("k_1", "t_3", "p_1", 6.66, "cuz roku")
 
     assert validate :hackney
   end
@@ -191,10 +180,7 @@ defmodule RokuIAPTest do
     }
 
     response = %{
-      "errorCode" => "",
-      "errorDetails" => "",
-      "errorMessage" => "",
-      "status" => 0
+      "status" => "Success"
     }
 
     expect(
@@ -208,12 +194,7 @@ defmodule RokuIAPTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIAP.update_bill_cycle("k_1", "t_3", billing_cycle_date) ==
-      {:ok, %HTTPoison.Response{
-          status_code: 200,
-          body: response
-        }
-      }
+    assert :ok == RokuIAP.update_bill_cycle("k_1", "t_3", billing_cycle_date)
 
     assert validate :hackney
   end
@@ -230,11 +211,8 @@ defmodule RokuIAPTest do
     }
 
     response = %{
-      "errorCode" => "",
-      "errorDetails" => "",
-      "errorMessage" => "",
-      "status" => 0,
-      "ReferenceId" => "Ref1"
+      "status" => "Success",
+      "referenceId" => "r_1"
     }
 
     expect(
@@ -248,12 +226,7 @@ defmodule RokuIAPTest do
       ])
     expect(:hackney, :body, 1, {:ok, Poison.encode!(response)})
 
-    assert RokuIAP.issue_service_credit("k_1", "c_1", "p_r_1", "p_1", "r_c_1", 6.66, "cuz roku") ==
-      {:ok, %HTTPoison.Response{
-          status_code: 200,
-          body: response
-        }
-      }
+    assert {:ok, "r_1"} == RokuIAP.issue_service_credit("k_1", "c_1", "p_r_1", "p_1", "r_c_1", 6.66, "cuz roku")
 
     assert validate :hackney
   end
