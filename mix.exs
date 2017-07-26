@@ -20,12 +20,11 @@ defmodule RokuIAP.Mixfile do
   end
 
   defp deps do
-    [
-      {:httpoison, "~> 0.11.1"},
-      {:poison, "~> 3.1.0"},
-      {:hackney, "~> 1.7.1"},
-      {:meck, "~> 0.8.2", only: :test}
-    ]
+    [{:httpoison, "~> 0.11.1"},
+     {:poison, "~> 3.1.0"},
+     {:hackney, "~> 1.7.1"},
+     {:meck, "~> 0.8.2", only: :test},
+     {:ex_doc, ">= 0.0.0", only: :dev}]
   end
 
   defp description do
