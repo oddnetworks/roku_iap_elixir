@@ -7,9 +7,11 @@ defmodule RokuIAP.Mixfile do
      elixir: "~> 1.4",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     package: package(),
      description: description(),
-     deps: deps()]
+     package: package(),
+     deps: deps(),
+     name: "Roku IAP",
+     source_url: "https://github.com/oddnetworks/roku_iap_elixir"]
   end
 
   def application do
